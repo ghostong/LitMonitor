@@ -21,8 +21,8 @@ def LiSocketServer ( Host, Port, Func ) :
     while 1:
         Conn, Addr = s.accept()
         Data = Conn.recv(1024)
-        Func(Data)
-        Conn.sendall('ok')
+        Ret = Func(Data)
+        Conn.sendall( Ret )
     Conn.close()
     return True
 

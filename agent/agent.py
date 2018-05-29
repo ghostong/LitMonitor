@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import os, re
+import os, re, json, time
 
 InfoList = {}
 
@@ -11,10 +11,10 @@ Lines = ''
 Line = ''
 for Line in CmdRes.splitlines() :
     Lines += Line + ' | '
-MatchRes = re.match( r'(.*)up(.*?)\,(.*)Tasks\:(.*?)total\,(.*?)\%Cpu\(s\)\:(.*?)\ us,', Lines, re.I )
+MatchRes = re.match( r'(.*)up(.*?)\,(.*)Tasks\:(.*?)total\,(.*?)\%?Cpu\(s\)\:(.*?)\%?us,', Lines, re.I )
 InfoList['UpTime'] = MatchRes.group(2).strip()
 InfoList['Task']   = MatchRes.group(4).strip()
-InfoList['Cpu:']   = MatchRes.group(6).strip()
+InfoList['Cpu']   = MatchRes.group(6).strip()
 
 #内存信息
 Cmd = 'free -m'
@@ -30,7 +30,7 @@ InfoList['SwapUse']   = MatchRes.group(12)
 InfoList['SwapTotal'] = MatchRes.group(10)
 
 #磁盘信息
-Cmd = "df -h |awk {'if ( match($1,\"^/dev\") ) print $NF\":\"$(NF-1)'}"
+Cmd = "df -h |awk {'if ( match($1,\"^/dev\") && length($2) > 0 ) print $NF\":\"$(NF-1)'}"
 CmdRes = os.popen( Cmd ).read()
 DiskList = {}
 for Line in CmdRes.splitlines() :
@@ -38,4 +38,6 @@ for Line in CmdRes.splitlines() :
     DiskList[Split[0]] = Split[1]
 InfoList['DiskList'] = DiskList
 
-print InfoList
+InfoList['LastTime'] = time.time()
+
+print json.dumps(InfoList,ensure_ascii=False)
