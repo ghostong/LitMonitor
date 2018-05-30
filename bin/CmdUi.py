@@ -78,4 +78,7 @@ if __name__=='__main__' :
         ForMatRes = DataForMat( MoniData )
         ColuCalc  = ColumnCalc( ForMatRes )
         PrintScreen ( ColuCalc , ForMatRes )
-        time.sleep (2);
+        for i in range(5,-1,-1) :
+            sys.stdout.write( "剩余 :"+ str(i) +"\r" )
+            sys.stdout.flush()
+            time.sleep (1)

@@ -5,7 +5,7 @@ import os, re, json, time
 InfoList = {}
 
 #进程信息
-Cmd = 'top -b -n 1 | head -6'
+Cmd = "top -b -n 2 |grep -E '^(top|Tasks|%?Cpu)' |tail -3"
 CmdRes = os.popen ( Cmd ).read()
 Lines = ''
 Line = ''
