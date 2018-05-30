@@ -10,7 +10,7 @@ UserName   = Main.CONFIG.get('SSH2_CONFIG','SSH2_USER')
 ServerPort = Main.CONFIG.get('DATA_SERVER','DATA_PORT')
 ServerHost = Main.CONFIG.get('DATA_SERVER','DATA_HOST')
 ClientAgentDir = Main.CONFIG.get('AGENT_CONFIG','CLIENT_AGENT_DIR')
-SpaceTime = int ( Main.CONFIG.get('AGENT_CONFIG','SPACE_TIME') )
+CircleTime = int ( Main.CONFIG.get('AGENT_CONFIG','CIRCLE_TIME') )
 
 def InitAgent () :
     for i in HostList :
@@ -42,9 +42,9 @@ if __name__=='__main__' :
     EndTime = 0
     while 1 :
         St = EndTime - StartTime
-        if ( StartTime > 0 and St < SpaceTime ) :
-            print '等待下一次', int( SpaceTime - St ) , '秒'
-            time.sleep( SpaceTime - St )
+        if ( StartTime > 0 and St < CircleTime ) :
+            print '等待下一次', int( CircleTime - St ) , '秒'
+            time.sleep( CircleTime - St )
         StartTime = time.time()
         print '正在执行'
         DoAgent ()

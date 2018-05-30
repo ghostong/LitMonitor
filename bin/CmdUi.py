@@ -7,6 +7,7 @@ import Main
 ServerPort = Main.CONFIG.get('DATA_SERVER','DATA_PORT')
 ServerHost = Main.CONFIG.get('DATA_SERVER','DATA_HOST')
 ColumeOrder= Main.CONFIG.get('CMDUI_CONFIG','COLUMN_ORDER').split(',')
+UiFlushTime= Main.CONFIG.get('CMDUI_CONFIG','UI_FLUSH_TIME')
 
 def GetMoniData () :
     Data = {}
@@ -68,9 +69,6 @@ def PrintScreen ( ColuCalc, ForMatRes ) :
         OutStr += BuildDataLine ( ForMatRes[i] )  + "\n"
     OutStr += Line  + "\n"
     print OutStr
-    #sys.stdout.write( OutStr + "\r" )
-    #sys.stdout.clear()
-
 
 if __name__=='__main__' :
     while 1 :
@@ -78,7 +76,7 @@ if __name__=='__main__' :
         ForMatRes = DataForMat( MoniData )
         ColuCalc  = ColumnCalc( ForMatRes )
         PrintScreen ( ColuCalc , ForMatRes )
-        for i in range(5,-1,-1) :
-            sys.stdout.write( "剩余 :"+ str(i) +"\r" )
+        for i in range( int(UiFlushTime) - 1, -1, -1 ) :
+            sys.stdout.write( "剩余 : "+ str(i) +"\r" )
             sys.stdout.flush()
             time.sleep (1)

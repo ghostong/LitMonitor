@@ -24,6 +24,9 @@ PassWord = raw_input("PassWord: ")
 
 HostList = Main.CONFIG.items("HOST_LIST")
 for i in HostList :
-    Cmd = "sshpass -p "+PassWord+" ssh-copy-id -i "+SshKeyFile+" "+UserName+"@"+i[1] +" -o StrictHostKeyChecking=no";
+    Cmd = "sshpass -p "+PassWord+" ssh -o StrictHostKeyChecking=no  -i "+SshKeyFile+" "+UserName+"@"+i[1] + " echo 1";
+    print os.popen ( Cmd ).read()
+    print Cmd
+    Cmd = "sshpass -p "+PassWord+" ssh-copy-id -i "+SshKeyFile+" "+UserName+"@"+i[1];
     print Cmd
     print os.popen ( Cmd ).read()
