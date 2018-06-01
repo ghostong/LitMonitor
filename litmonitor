@@ -1,0 +1,56 @@
+#!/bin/bash
+
+BashRoot=$(cd `dirname $0`; pwd)
+
+do_start() {
+    Cmd="ps aux | grep 'python ${BashRoot}/bin/' |grep -E 'DataServer|Worker' |grep -v 'grep ' |wc -l"
+    ProcNum=$(/bin/bash -c "$Cmd")
+    if (($ProcNum > 1)); then
+        exit
+    fi
+    echo " * Starting service DataServer"
+    python ${BashRoot}/bin/DataServer.py &> /dev/null &
+    echo " * Starting service Worker"
+    python ${BashRoot}/bin/Worker.py &> /dev/null &
+}
+
+do_stop() {
+    echo " * Stoping service DataServer"
+    echo " * Stoping service Worker"
+    Cmd="ps aux | grep 'python ${BashRoot}/bin/' |grep -E 'DataServer|Worker' |grep -v 'grep ' |awk '{print \$2}' |xargs kill -9"
+    /bin/bash -c "$Cmd"
+}
+
+do_restart() {
+    do_stop
+    do_start
+}
+
+do_init() {
+    python ${BashRoot}/bin/Init.py
+}
+
+do_cmdui() {
+    python ${BashRoot}/bin/CmdUi.py
+}
+
+case $1 in  
+    start)  
+        do_start
+        ;;
+    stop)  
+        do_stop
+        ;;
+    restart)  
+        do_restart
+        ;;
+    init)
+        do_init
+        ;;
+    cmdui)  
+        do_cmdui
+        ;;
+    *)  
+        echo "Usage: litmonitor {start|stop|restart|cmdui}"
+        ;;
+esac

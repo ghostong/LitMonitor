@@ -39,7 +39,7 @@ def DoAgent () :
             CmdRes = os.popen( Cmd ).read()
             WorkerData['AgentData'] = json.loads( CmdRes )
             WdS = json.dumps(WorkerData,ensure_ascii=False)
-        except TypeError:
+        except :
             print "[Error]"
             continue
         #print WdS

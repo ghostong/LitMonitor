@@ -82,8 +82,12 @@ if __name__=='__main__' :
             ColuCalc  = ColumnCalc( ForMatRes )
             PrintScreen ( ColuCalc , ForMatRes )
             for i in range( int(UiFlushTime) - 1, -1, -1 ) :
-                sys.stdout.write( "剩余 : "+ str(i) +"\r" )
+                NowTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+                sys.stdout.write( "litmonitor:v0.01        Waiting:"+ str(i) + '        [' + NowTime +']'+"\r" )
                 sys.stdout.flush()
                 time.sleep (1)
+        except KeyboardInterrupt :
+            print '\n\nUser exit !'
+            os._exit(0)
         except :
             os._exit(0)
