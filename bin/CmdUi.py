@@ -15,7 +15,11 @@ def GetMoniData () :
     Data['ClientName'] = 'CmdUi'
     WdS = json.dumps(Data,ensure_ascii=False)
     ServerJson = Main.LiSocketClient ( ServerHost, ServerPort, WdS )
-    ServData = json.loads( ServerJson )
+    try :
+        ServData = json.loads( ServerJson )
+    except :
+        print ServerJson
+        os._exit(0)
     return ServData
 
 def DataForMat ( Data ) :
@@ -72,11 +76,14 @@ def PrintScreen ( ColuCalc, ForMatRes ) :
 
 if __name__=='__main__' :
     while 1 :
-        MoniData  = GetMoniData()
-        ForMatRes = DataForMat( MoniData )
-        ColuCalc  = ColumnCalc( ForMatRes )
-        PrintScreen ( ColuCalc , ForMatRes )
-        for i in range( int(UiFlushTime) - 1, -1, -1 ) :
-            sys.stdout.write( "剩余 : "+ str(i) +"\r" )
-            sys.stdout.flush()
-            time.sleep (1)
+        try:
+            MoniData  = GetMoniData()
+            ForMatRes = DataForMat( MoniData )
+            ColuCalc  = ColumnCalc( ForMatRes )
+            PrintScreen ( ColuCalc , ForMatRes )
+            for i in range( int(UiFlushTime) - 1, -1, -1 ) :
+                sys.stdout.write( "剩余 : "+ str(i) +"\r" )
+                sys.stdout.flush()
+                time.sleep (1)
+        except :
+            os._exit(0)

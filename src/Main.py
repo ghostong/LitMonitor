@@ -3,13 +3,9 @@
 import ConfigParser, os, socket
 
 ROOT_DIR = os.path.dirname( os.path.dirname( os.path.realpath(__file__) ) )
-
 CONFIG_FILE = ROOT_DIR+'/litmonitor.conf'
-
 CONFIG = ConfigParser.ConfigParser()
-
 CONFIG.read( CONFIG_FILE )
-
 SSH_KEY_FILE = ROOT_DIR+"/sshkey/litmonitor"
 
 #Socket服务端
@@ -28,10 +24,13 @@ def LiSocketServer ( Host, Port, Func ) :
 
 #Socket客户端
 def LiSocketClient ( Host, Port, Cont ) :
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(( Host, int(Port) ))
-    s.sendall( Cont )
-    Ret = s.recv(1024)
-    s.close()
-    return Ret
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect(( Host, int(Port) ))
+        s.sendall( Cont )
+        Ret = s.recv(1024)
+        s.close()
+        return Ret
+    except :
+        return 'Socket connect error'
 
