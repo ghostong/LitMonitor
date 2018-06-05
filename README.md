@@ -2,7 +2,7 @@
 
     1) 下载 litmonitor 源代码
     2) 源代码解压至 /opt/litmonitor 目录
-    3) 指定命令: ln -s /opt/litmonitor/litmonitor /usr/bin/litmonitor
+    3) 执行命令: ln -s /opt/litmonitor/litmonitor /usr/bin/litmonitor
 
 **2. 配置**
 

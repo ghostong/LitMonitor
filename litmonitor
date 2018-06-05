@@ -1,6 +1,5 @@
 #!/bin/bash
-
-BashRoot=$(cd `dirname $0`; pwd)
+BashRoot=$(dirname $(readlink -f $0))  
 
 do_start() {
     Cmd="ps aux | grep 'python ${BashRoot}/bin/' |grep -E 'DataServer|Worker' |grep -v 'grep ' |wc -l"
