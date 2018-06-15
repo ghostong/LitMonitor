@@ -14,7 +14,6 @@ SshKeyFile = Main.SSH_KEY_FILE
 
 if not os.path.isfile( SshKeyFile ) :
     Cmd = "ssh-keygen -t rsa -q -N '' -f "+SshKeyFile
-    print Cmd
     print os.popen ( Cmd ).read()
 else :
     print "File "+SshKeyFile + " exists"
@@ -24,9 +23,17 @@ PassWord = raw_input("PassWord: ")
 
 HostList = Main.CONFIG.items("HOST_LIST")
 for i in HostList :
-    Cmd = "sshpass -p "+PassWord+" ssh -o StrictHostKeyChecking=no  -i "+SshKeyFile+" "+UserName+"@"+i[1] + " echo 1";
-    print os.popen ( Cmd ).read()
-    print Cmd
-    Cmd = "sshpass -p "+PassWord+" ssh-copy-id -i "+SshKeyFile+" "+UserName+"@"+i[1];
-    print Cmd
-    print os.popen ( Cmd ).read()
+    Cmd = "sshpass -p "+PassWord+" ssh -o StrictHostKeyChecking=no  -i "+SshKeyFile+" "+UserName+"@"+i[1] + " echo 1 > /dev/null 2>&1";
+    print "ssh-connect to " + UserName+"@"+i[1] ,
+    RunStatus = os.system ( Cmd )
+    if RunStatus == 0 :
+        print ": Success "
+    else :
+        print ": Error "
+    Cmd = "sshpass -p "+PassWord+" ssh-copy-id -i "+SshKeyFile+" "+UserName+"@"+i[1]+" > /dev/null 2>&1";
+    print "ssh-copy-id to " + UserName+"@"+i[1] ,
+    RunStatus = os.system ( Cmd )
+    if RunStatus == 0 :
+        print ": Success "
+    else :
+        print ": Error "

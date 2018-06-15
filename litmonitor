@@ -25,6 +25,16 @@ do_restart() {
     do_start
 }
 
+do_debug() {
+    do_stop
+    echo " * Starting debug mode"
+    python ${BashRoot}/bin/DataServer.py &
+    python ${BashRoot}/bin/Worker.py &
+    sleep 30
+    echo " * Stoping debug mode"
+    do_stop
+}
+
 do_init() {
     python ${BashRoot}/bin/Init.py
 }
@@ -43,6 +53,9 @@ case $1 in
     restart)  
         do_restart
         ;;
+    debug)
+        do_debug
+        ;;
     init)
         do_init
         ;;
@@ -50,6 +63,6 @@ case $1 in
         do_cmdui
         ;;
     *)  
-        echo "Usage: litmonitor {start|stop|restart|cmdui}"
+        echo "Usage: litmonitor {start|stop|restart|debug|cmdui}"
         ;;
 esac
