@@ -16,7 +16,7 @@ def LiSocketServer ( Host, Port, Func ) :
     s.listen(100)
     while 1:
         Conn, Addr = s.accept()
-        Data = Conn.recv(1024)
+        Data = Conn.recv(102400)
         Ret = Func(Data)
         Conn.sendall( Ret )
     Conn.close()
@@ -28,7 +28,7 @@ def LiSocketClient ( Host, Port, Cont ) :
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect(( Host, int(Port) ))
         s.sendall( Cont )
-        Ret = s.recv(1024)
+        Ret = s.recv(102400)
         s.close()
         return Ret
     except :
