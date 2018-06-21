@@ -1,7 +1,7 @@
 **1. 安装**
 
-    1) 下载 litmonitor 源代码
-    2) 源代码解压至 /opt/litmonitor 目录
+    1) cd /opt
+    2) git clone git@code.aliyun.com:litosrc/litmonitor.git
     3) chmod 755 /opt/litmonitor/litmonitor
     4) 执行命令: ln -s /opt/litmonitor/litmonitor /usr/bin/litmonitor
 
