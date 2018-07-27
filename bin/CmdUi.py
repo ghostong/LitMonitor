@@ -86,7 +86,7 @@ def PrintScreen ( ColuCalc, ForMatRes ) :
     OutStr += Line + "\n"
     ForMatRes.pop('Title')
     Sort=GetSort()
-    NewSort = sorted( ForMatRes, key=lambda k: ForMatRes[k][Sort], reverse=True )
+    NewSort = sorted( ForMatRes, key=lambda k: float(ForMatRes[k][Sort]), reverse=True )
     for i in NewSort :
         OutStr += BuildDataLine ( ForMatRes[i] )  + "\n"
     OutStr += Line  + "\n"
