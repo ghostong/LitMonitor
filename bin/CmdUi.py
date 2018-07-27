@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import sys, os, json, time
+import sys, os, json, time, operator
 sys.path.append( os.path.dirname( os.path.dirname( os.path.realpath(__file__) ) ) + "/src" )
 import Main
 
@@ -24,17 +24,26 @@ def GetMoniData () :
 
 def DataForMat ( Data ) :
     NewData = {}
-    Title = {'Name':'Name','Ip':'Ip','Cpu':'Cpu','Mem':'Mem','Swap':'Swap','Task':'Task','Disk':'Disk','Time':'Time'}
+    Title = { 'Name':'Name','Ip':'Ip','Cpu':'Cpu%','CpuNum':'CpuNum','MemUse':'MemUse%','Mem':'Mem','SwapUse':'SwapUse%','Swap':'Swap','Task':'Task','Disk':'Disk','Time':'Time' }
     NewData['Title'] = Title
     for i in Data :
         d = Data[i]
         Disk = ','.join( d['AgentData']['DiskList'].values() )
         Time = time.strftime( "%H:%M:%S", time.localtime( d['AgentData']['LastTime'] ) )
+        MemUse  = str( round( float(d['AgentData']['MemUse'])/float(d['AgentData']['MemTotal']) , 4) * 100 )
+        SwapUse = str( round( float(d['AgentData']['SwapUse'])/float(d['AgentData']['SwapTotal']) , 4) * 100 )
         Tmp = { \
-                'Name':d['HostName'],'Ip':d['HostIp'],'Cpu':d['AgentData']['Cpu']+'%',\
-                'Mem':d['AgentData']['MemUse']+'M/'+d['AgentData']['MemTotal']+'M',\
-                'Swap':d['AgentData']['SwapUse']+'M/'+d['AgentData']['SwapTotal']+'M',\
-                'Task':d['AgentData']['Task'],'Disk':Disk,'Time':Time\
+                'Name': d['HostName'],\
+                'Ip'  : d['HostIp'],\
+                'Cpu' : d['AgentData']['Cpu'],\
+                'Mem' : d['AgentData']['MemTotal']+'M',\
+                'Swap': d['AgentData']['SwapTotal']+'M',\
+                'Task': d['AgentData']['Task'],\
+                'Disk': Disk,\
+                'Time': Time,\
+                'CpuNum' : d['AgentData']['CpuNum'],\
+                'MemUse' : MemUse ,\
+                'SwapUse': SwapUse,
                 }
         NewData[i] = Tmp
     return NewData
@@ -69,10 +78,21 @@ def PrintScreen ( ColuCalc, ForMatRes ) :
     OutStr += BuildDataLine ( ForMatRes['Title'] )  + "\n"
     OutStr += Line + "\n"
     ForMatRes.pop('Title')
-    for i in ForMatRes :
+    Sort=GetSort()
+    NewSort = sorted( ForMatRes, key=lambda k: ForMatRes[k][Sort], reverse=True )
+    for i in NewSort :
         OutStr += BuildDataLine ( ForMatRes[i] )  + "\n"
     OutStr += Line  + "\n"
     print OutStr
+def GetSort () :
+    SortList = {'name':'Name','ip':'Ip','cpu':'Cpu','mem':'MemUse','swap':'SwapUse'}
+    Args=dict(zip(range(len(sys.argv)),sys.argv))
+    if Args.get(1) == '-s' and Args.get(2) != None :
+        Val=Args.get(2).lower()
+        if Val in  SortList.keys() :
+            return SortList[Val]
+    return 'Name'
+
 
 if __name__=='__main__' :
     while 1 :
@@ -83,7 +103,8 @@ if __name__=='__main__' :
             PrintScreen ( ColuCalc , ForMatRes )
             for i in range( int(UiFlushTime) - 1, -1, -1 ) :
                 NowTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-                sys.stdout.write( "litmonitor:v0.01        Waiting:"+ str(i) + '        [' + NowTime +']'+"\r" )
+                Sort = GetSort ()
+                sys.stdout.write( "litmonitor:v0.01        Sort:"+Sort+"-Desc        Waiting:"+ str(i) + '        [' + NowTime +']'+"\r" )
                 sys.stdout.flush()
                 time.sleep (1)
         except KeyboardInterrupt :

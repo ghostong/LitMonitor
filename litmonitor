@@ -1,5 +1,7 @@
 #!/bin/bash
-BashRoot=$(dirname $(readlink -f $0))  
+BashRoot=$(dirname $(readlink -f $0))
+Param=$2
+Values=$3
 
 do_start() {
     Cmd="ps aux | grep 'python ${BashRoot}/bin/' |grep -E 'DataServer|Worker' |grep -v 'grep ' |wc -l"
@@ -40,7 +42,7 @@ do_init() {
 }
 
 do_cmdui() {
-    python ${BashRoot}/bin/CmdUi.py
+    python ${BashRoot}/bin/CmdUi.py ${Param} ${Values}
 }
 
 case $1 in  

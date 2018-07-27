@@ -14,7 +14,7 @@ for Line in CmdRes.splitlines() :
 MatchRes = re.match( r'(.*)up(.*?)\,(.*)Tasks\:(.*?)total\,(.*?)\%?Cpu\(s\)\:(.*?)\%?us,', Lines, re.I )
 InfoList['UpTime'] = MatchRes.group(2).strip()
 InfoList['Task']   = MatchRes.group(4).strip()
-InfoList['Cpu']   = MatchRes.group(6).strip()
+InfoList['Cpu']    = MatchRes.group(6).strip()
 
 #内存信息
 Cmd = 'free -m'
@@ -38,6 +38,13 @@ for Line in CmdRes.splitlines() :
     DiskList[Split[0]] = Split[1]
 InfoList['DiskList'] = DiskList
 
+#最后更新时间
 InfoList['LastTime'] = time.time()
+
+#CPU数量
+Cmd = "cat /proc/cpuinfo |grep 'model name' |wc -l"
+CmdRes = os.popen( Cmd ).read()
+CpuNum = CmdRes.splitlines()[0]
+InfoList['CpuNum'] = CpuNum
 
 print json.dumps(InfoList,ensure_ascii=False)
