@@ -92,13 +92,13 @@ def PrintScreen ( ColuCalc, ForMatRes ) :
     OutStr += Line  + "\n"
     print OutStr
 def GetSort () :
-    SortList = {'name':'Name','ip':'Ip','cpu':'Cpu','mem':'MemUse','swap':'SwapUse'}
+    SortList = {'cpu':'Cpu','mem':'MemUse','swap':'SwapUse'}
     Args=dict(zip(range(len(sys.argv)),sys.argv))
     if Args.get(1) == '-s' and Args.get(2) != None :
         Val=Args.get(2).lower()
         if Val in  SortList.keys() :
             return SortList[Val]
-    return 'Name'
+    return 'Cpu'
 
 
 if __name__=='__main__' :
