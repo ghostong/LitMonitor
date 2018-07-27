@@ -1,9 +1,11 @@
 **1. 安装**
 
-    1) cd /opt
-    2) git clone https://code.aliyun.com/litosrc/litmonitor.git
-    3) chmod 755 /opt/litmonitor/litmonitor
-    4) 执行命令: ln -s /opt/litmonitor/litmonitor /usr/bin/litmonitor
+```
+cd /opt && \
+git clone https://code.aliyun.com/litosrc/litmonitor.git && \
+chmod 755 /opt/litmonitor/litmonitor && \
+ln -s /opt/litmonitor/litmonitor /usr/bin/litmonitor
+```
 
 **2. 配置**
 

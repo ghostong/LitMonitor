@@ -30,8 +30,15 @@ def DataForMat ( Data ) :
         d = Data[i]
         Disk = ','.join( d['AgentData']['DiskList'].values() )
         Time = time.strftime( "%H:%M:%S", time.localtime( d['AgentData']['LastTime'] ) )
-        MemUse  = str( round( float(d['AgentData']['MemUse'])/float(d['AgentData']['MemTotal']) , 4) * 100 )
-        SwapUse = str( round( float(d['AgentData']['SwapUse'])/float(d['AgentData']['SwapTotal']) , 4) * 100 )
+        if float(d['AgentData']['MemUse']) and float(d['AgentData']['SwapTotal']) :
+            MemUse  = str( round( float(d['AgentData']['MemUse'])/float(d['AgentData']['MemTotal']) , 4) * 100 )
+        else :
+            MemUse = '0'
+
+        if float(d['AgentData']['SwapUse']) and float(d['AgentData']['SwapTotal']) :
+            SwapUse = str( round( float(d['AgentData']['SwapUse'])/float(d['AgentData']['SwapTotal']) , 4) * 100 )
+        else:
+            SwapUse = '0'
         Tmp = { \
                 'Name': d['HostName'],\
                 'Ip'  : d['HostIp'],\
